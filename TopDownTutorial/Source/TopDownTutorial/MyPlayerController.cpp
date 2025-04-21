@@ -9,18 +9,15 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "NiagaraFunctionLibrary.h"
+#include "MyEnemy.h" // 추가
 
 
 
 AMyPlayerController::AMyPlayerController()
 {
-	//마우스 커서를 보이도록 설정
 	bShowMouseCursor = true;
-	//기본 마우스 커서 모양 설정
 	DefaultMouseCursor = EMouseCursor::Default;
-	//캐시된 목적지 벡터를 초기화 (월드 좌표의 시작점)
 	CachedDestination = FVector::ZeroVector;
-	//누름 지속 시간을 0으로 초기화
 	FollowTime = 0.f;
 
 	
@@ -53,6 +50,13 @@ void AMyPlayerController::SetupInputComponent()
 		
 
 	}
+}
+
+void AMyPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+
+	CheckCursorTrace();
 }
 
 void AMyPlayerController::OnInputStarted()
@@ -96,3 +100,39 @@ void AMyPlayerController::OnSetDestinationReleased()
 
 	FollowTime = 0.f;
 }
+
+void AMyPlayerController::CheckCursorTrace()
+{
+	FHitResult Hit;
+
+	if (GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit))
+	{
+		AMyEnemy* Other = Cast<AMyEnemy>(Hit.GetActor());
+		if (Other == nullptr)
+		{
+			if (TargetActor)
+			{
+				TargetActor->UnHighlight();
+			}
+
+		}
+		else
+		{
+			if (TargetActor)
+			{
+				if (TargetActor != Other)
+				{
+					TargetActor->UnHighlight();
+					Other->Highlight();
+				}
+			}
+			else
+			{
+				Other->Highlight();
+			}
+		}
+
+		TargetActor = Other;
+	}
+}
+

@@ -37,6 +37,6 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		//ShouldMove = MovementComponent->GetCurrentAcceleration() != FVector::Zero() && GroundSpeed > 3.0f;
 		ShouldMove = GroundSpeed > 3.0f;
 
-		UE_LOG(LogTemp, Warning, TEXT("Bool Value is: %s"), ShouldMove ? TEXT("true") : TEXT("false"));
+		//UE_LOG(LogTemp, Warning, TEXT("Bool Value is: %s"), ShouldMove ? TEXT("true") : TEXT("false"));
 	}
 }

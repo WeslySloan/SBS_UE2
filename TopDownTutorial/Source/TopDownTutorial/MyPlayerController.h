@@ -34,8 +34,8 @@ private:
 
 protected:
 	virtual void BeginPlay() override;
-	// Called to bind functionality to input
 	virtual void SetupInputComponent() override;
+	virtual void PlayerTick(float DeltaTime) override;	 // Tick 추가
 protected:
 	void OnInputStarted();
 	void OnSetDestinationTriggered();
@@ -46,5 +46,12 @@ private:
 	float FollowTime;
 
 	bool bMousePressed = false;
+
+protected:
+	UPROPERTY(BlueprintReadOnly)
+	class AMyEnemy* TargetActor;		   // Target 추가
+
+protected:
+	void CheckCursorTrace();	// CursorTrace 추가
 
 };

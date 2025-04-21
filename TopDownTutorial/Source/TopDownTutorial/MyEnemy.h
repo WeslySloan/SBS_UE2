@@ -10,6 +10,9 @@ UCLASS()
 class TOPDOWNTUTORIAL_API AMyEnemy : public ACharacter
 {
 	GENERATED_BODY()
+public:
+	UPROPERTY(BlueprintReadOnly)
+	bool bHighlighted = false;
 
 public:
 	// Sets default values for this character's properties
@@ -25,5 +28,9 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+public:
+	void Highlight();
+	void UnHighlight();
 
 };

@@ -27,7 +27,6 @@ AMyEnemy::AMyEnemy()
 void AMyEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -42,5 +41,17 @@ void AMyEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AMyEnemy::Highlight()
+{
+	bHighlighted = true;
+	GetMesh()->SetRenderCustomDepth(true);
+}
+
+void AMyEnemy::UnHighlight()
+{
+	bHighlighted = false;
+	GetMesh()->SetRenderCustomDepth(false);
 }
 
