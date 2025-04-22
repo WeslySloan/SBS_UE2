@@ -35,7 +35,7 @@ private:
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
-	virtual void PlayerTick(float DeltaTime) override;	 // Tick 추가
+	virtual void PlayerTick(float DeltaTime) override;	
 protected:
 	void OnInputStarted();
 	void OnSetDestinationTriggered();
@@ -49,9 +49,17 @@ private:
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
-	class AMyEnemy* TargetActor;		   // Target 추가
+	class AMyPlayer* MyPlayer;
+	UPROPERTY(BlueprintReadOnly)
+	class AMyEnemy* PointActor;		 
+	UPROPERTY(BlueprintReadOnly)
+	class AMyEnemy* TargetActor;
+
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* AttackMontage;
 
 protected:
-	void CheckCursorTrace();	// CursorTrace 추가
+	void CheckCursorTrace();	
+	void FollowAndAttack();
 
 };
