@@ -22,14 +22,22 @@ private:
 	class UCameraComponent* FollowCamera;
 
 public:
-	// Sets default values for this character's properties
+	UPROPERTY(VisibleAnywhere)
+	bool bIsAttacking = false;
+	UPROPERTY()
+	class UCharacterAnimInstance* AnimInstance;		   
+public:
 	AMyPlayer();
+public:
+	void Attack();	  
+	void HitAttack();	// Ãß°¡
 
+
+	UFUNCTION()
+	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 };

@@ -7,6 +7,11 @@
 
 UCharacterAnimInstance::UCharacterAnimInstance()
 {
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> AM(TEXT("/Script/Engine.AnimMontage'/Game/ParagonGreystone/Characters/Heroes/Greystone/Animations/Attack_PrimaryB_Montage.Attack_PrimaryB_Montage'"));
+	if (AM.Succeeded())
+	{
+		AttackMontage = AM.Object;
+	}
 	
 }
 
@@ -36,7 +41,16 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		//ShouldMove = MovementComponent->GetCurrentAcceleration() != FVector::Zero() && GroundSpeed > 3.0f;
 		ShouldMove = GroundSpeed > 3.0f;
-
-		//UE_LOG(LogTemp, Warning, TEXT("Bool Value is: %s"), ShouldMove ? TEXT("true") : TEXT("false"));
 	}
+}
+
+void UCharacterAnimInstance::AnimNotify_Hit()
+{
+	//UE_LOG(LogTemp, Log, TEXT("HIT"));
+	OnAttackHit.Broadcast(); // 등록된 함수 호출
+}
+
+void UCharacterAnimInstance::PlayAttackMontage()
+{
+	Montage_Play(AttackMontage, 1.f);
 }

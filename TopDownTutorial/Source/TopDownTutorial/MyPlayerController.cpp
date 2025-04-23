@@ -11,6 +11,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "MyEnemy.h" 
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 
 
@@ -166,22 +167,18 @@ void AMyPlayerController::FollowAndAttack()
 
 	if (Distance < 250.f)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Distance"));
 
 		if (bMousePressed)
 		{
-			UE_LOG(LogTemp, Log, TEXT("bMousePressed"));
 			FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(MyPlayer->GetActorLocation(), TargetActor->GetActorLocation());
 			MyPlayer->SetActorRotation(LookAtRotation);
 
 			if (AttackMontage)
 			{
-				UE_LOG(LogTemp, Log, TEXT("ATTACK"));
-				GetCharacter()->PlayAnimMontage(AttackMontage);
-			}
-			else
-			{
-				UE_LOG(LogTemp, Log, TEXT("Not Attack"));
+				//this == MyPlayer->GetController();
+				//UGameplayStatics::ApplyDamage(TargetActor, 10.f, this, nullptr, NULL);
+				//GetCharacter()->PlayAnimMontage(AttackMontage);
+				MyPlayer->Attack();
 			}
 
 			TargetActor = PointActor;

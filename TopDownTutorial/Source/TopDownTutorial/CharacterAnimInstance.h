@@ -6,9 +6,8 @@
 #include "Animation/AnimInstance.h"
 #include "CharacterAnimInstance.generated.h"
 
-/**
- * 
- */
+DECLARE_MULTICAST_DELEGATE(FOnAttackHit);
+
 UCLASS()
 class TOPDOWNTUTORIAL_API UCharacterAnimInstance : public UAnimInstance
 {
@@ -22,6 +21,11 @@ private:
 	bool ShouldMove;
 	UPROPERTY(Category = "MovementData", EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	bool IsFalling;
+	UPROPERTY(Category = "Attack", EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UAnimMontage* AttackMontage;	 
+
+public:
+	FOnAttackHit OnAttackHit; // 추가
 
 public:
 	UPROPERTY(VisibleAnywhere)
@@ -33,5 +37,10 @@ public:
 public:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+	UFUNCTION()
+	void AnimNotify_Hit();
+
+	void PlayAttackMontage();  // 추가
 	
 };

@@ -8,6 +8,7 @@
 #include "InputActionValue.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "CharacterAnimInstance.h"
 
 // Sets default values
 AMyPlayer::AMyPlayer()
@@ -41,10 +42,36 @@ AMyPlayer::AMyPlayer()
 
 }
 
+void AMyPlayer::Attack()
+{
+	if (bIsAttacking)
+		return;
+
+	AnimInstance->PlayAttackMontage();
+
+	bIsAttacking = true;
+
+	
+}
+
+void AMyPlayer::HitAttack()
+{
+	UE_LOG(LogTemp, Log, TEXT("HIT"));
+}
+
+void AMyPlayer::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	bIsAttacking = false;
+}
+
 // Called when the game starts or when spawned
 void AMyPlayer::BeginPlay()
 {
 	Super::BeginPlay();	
+
+	AnimInstance = Cast<UCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	AnimInstance->OnMontageEnded.AddDynamic(this, &AMyPlayer::OnAttackMontageEnded);
+	AnimInstance->OnAttackHit.AddUObject(this, &AMyPlayer::HitAttack); // 함수 등록
 }
 
 // Called every frame
