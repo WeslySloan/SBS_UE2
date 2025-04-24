@@ -9,6 +9,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "CharacterAnimInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMyPlayer::AMyPlayer()
@@ -56,7 +57,33 @@ void AMyPlayer::Attack()
 
 void AMyPlayer::HitAttack()
 {
-	UE_LOG(LogTemp, Log, TEXT("HIT"));
+	FHitResult HitResult;
+	FCollisionQueryParams Params(NAME_None, false, this);
+
+	float AttackRange = 150.f;
+	float AttackRadius = 50.f;
+
+	bool Result = GetWorld()->SweepSingleByChannel(OUT HitResult,
+		GetActorLocation(), GetActorLocation() + GetActorForwardVector() * AttackRange,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel2,
+		FCollisionShape::MakeSphere(AttackRadius),
+		Params);
+
+	FVector Forward = GetActorForwardVector() * AttackRange;
+	FVector Center = GetActorLocation() + Forward * 0.5f;
+	float HalfHeight = AttackRange * 0.5f + AttackRadius;
+	FQuat Rotation = FRotationMatrix::MakeFromZ(Forward).ToQuat();
+
+	FColor DrawColor = Result ? FColor::Green : FColor::Red;
+
+	DrawDebugCapsule(GetWorld(), Center, HalfHeight, AttackRadius, Rotation, DrawColor, false, 2.f);
+
+	if (Result && HitResult.GetActor())
+	{
+		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 10.f, GetController(), nullptr, NULL);
+	}
+
 }
 
 void AMyPlayer::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
@@ -71,7 +98,7 @@ void AMyPlayer::BeginPlay()
 
 	AnimInstance = Cast<UCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 	AnimInstance->OnMontageEnded.AddDynamic(this, &AMyPlayer::OnAttackMontageEnded);
-	AnimInstance->OnAttackHit.AddUObject(this, &AMyPlayer::HitAttack); // 함수 등록
+	AnimInstance->OnAttackHit.AddUObject(this, &AMyPlayer::HitAttack); 
 }
 
 // Called every frame

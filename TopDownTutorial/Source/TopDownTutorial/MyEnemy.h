@@ -14,6 +14,9 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool bHighlighted = false;
 
+	UPROPERTY(BlueprintReadOnly)
+	class UWidgetComponent* HpBar;
+
 public:
 	// Sets default values for this character's properties
 	AMyEnemy();

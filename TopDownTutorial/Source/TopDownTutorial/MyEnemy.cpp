@@ -3,6 +3,9 @@
 
 #include "MyEnemy.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "EnemyAIController.h"
+#include "HpBarUserWidget.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values
 AMyEnemy::AMyEnemy()
@@ -19,6 +22,21 @@ AMyEnemy::AMyEnemy()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 640.0f, 0.0f);
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
+
+	AIControllerClass = AEnemyAIController::StaticClass();
+
+	HpBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBar"));
+	HpBar->SetupAttachment(GetMesh());
+	HpBar->SetWidgetSpace(EWidgetSpace::Screen);
+	static ConstructorHelpers::FClassFinder<UHpBarUserWidget> UW(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/WBP_HpBar.WBP_HpBar_C'"));
+	if (UW.Succeeded())
+	{
+		HpBar->SetWidgetClass(UW.Class);
+		HpBar->SetDrawSize(FVector2D(200.f, 20.f));
+		HpBar->SetRelativeLocation(FVector(0.f, 0.f, 200.f));
+
+
+	}
 
 
 }
