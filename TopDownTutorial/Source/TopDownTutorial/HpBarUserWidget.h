@@ -13,5 +13,13 @@ UCLASS()
 class TOPDOWNTUTORIAL_API UHpBarUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
+private:
+	UPROPERTY()
+	class UCharacterInfo* CharacterInfo;
+	UPROPERTY(meta =(BindWidget))
+	class UProgressBar* PB_Bar;
+public:
+	void BindHp(class UCharacterInfo* Info);
+	void UpdateHp();
 	
 };

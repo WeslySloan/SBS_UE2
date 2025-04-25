@@ -17,6 +17,9 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	class UWidgetComponent* HpBar;
 
+	UPROPERTY()
+	class UCharacterInfo* CharacterInfo;
+
 public:
 	// Sets default values for this character's properties
 	AMyEnemy();
@@ -33,10 +36,13 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+public:
+	void OnDead(AActor* DamageCauser);
 
 public:
 	void Highlight();
 	void UnHighlight();
+
 
 
 };

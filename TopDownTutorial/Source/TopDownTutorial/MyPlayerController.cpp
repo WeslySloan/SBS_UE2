@@ -161,32 +161,16 @@ void AMyPlayerController::FollowAndAttack()
 {
 	if (TargetActor == nullptr)
 		return;
-
+	
 	FVector Direction = TargetActor->GetActorLocation() - MyPlayer->GetActorLocation();
 	float Distance = Direction.Size2D();
 
 	if (Distance < 250.f)
 	{
-
-		if (bMousePressed)
-		{
 			FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(MyPlayer->GetActorLocation(), TargetActor->GetActorLocation());
 			MyPlayer->SetActorRotation(LookAtRotation);
-
-			if (AttackMontage)
-			{
-				//this == MyPlayer->GetController();
-				//UGameplayStatics::ApplyDamage(TargetActor, 10.f, this, nullptr, NULL);
-				//GetCharacter()->PlayAnimMontage(AttackMontage);
-				MyPlayer->Attack();
-			}
-
+			MyPlayer->Attack();
 			TargetActor = PointActor;
-		}
-		else
-		{
-			TargetActor = nullptr;
-		}
 
 	}
 	else

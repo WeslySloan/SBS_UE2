@@ -6,6 +6,7 @@
 #include "EnemyAIController.h"
 #include "HpBarUserWidget.h"
 #include "Components/WidgetComponent.h"
+#include "CharacterInfo.h"
 
 // Sets default values
 AMyEnemy::AMyEnemy()
@@ -34,9 +35,9 @@ AMyEnemy::AMyEnemy()
 		HpBar->SetWidgetClass(UW.Class);
 		HpBar->SetDrawSize(FVector2D(200.f, 20.f));
 		HpBar->SetRelativeLocation(FVector(0.f, 0.f, 200.f));
-
-
 	}
+
+	CharacterInfo = CreateDefaultSubobject<UCharacterInfo>(TEXT("CharacterInfo"));
 
 
 }
@@ -45,6 +46,12 @@ AMyEnemy::AMyEnemy()
 void AMyEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+
+	auto HpWidget = Cast<UHpBarUserWidget>(HpBar->GetUserWidgetObject());
+	if (HpWidget)
+	{
+		HpWidget->BindHp(CharacterInfo);
+	}
 }
 
 // Called every frame
@@ -63,8 +70,21 @@ void AMyEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 float AMyEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	UE_LOG(LogTemp, Log, TEXT("Damaged : %f"), Damage);
-	return 0.0f;
+
+	CharacterInfo->UpdateHp(Damage);
+
+	if (CharacterInfo->Status == ECharacterStatue::DEATH)
+	{
+		OnDead(DamageCauser);
+	}
+	
+	return Damage;
+}
+
+void AMyEnemy::OnDead(AActor* DamageCauser)
+{		  
+	//Todo
+
 }
 
 void AMyEnemy::Highlight()
