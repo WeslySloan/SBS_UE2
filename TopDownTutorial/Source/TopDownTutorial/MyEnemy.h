@@ -20,6 +20,9 @@ public:
 	UPROPERTY()
 	class UCharacterInfo* CharacterInfo;
 
+	UPROPERTY()
+	class UCharacterAnimInstance* AnimInstance;
+
 public:
 	// Sets default values for this character's properties
 	AMyEnemy();
@@ -42,6 +45,8 @@ public:
 public:
 	void Highlight();
 	void UnHighlight();
+public:
+	void Attack();
 
 
 

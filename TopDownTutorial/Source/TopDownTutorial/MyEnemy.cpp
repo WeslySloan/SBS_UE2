@@ -7,6 +7,7 @@
 #include "HpBarUserWidget.h"
 #include "Components/WidgetComponent.h"
 #include "CharacterInfo.h"
+#include "CharacterAnimInstance.h"
 
 // Sets default values
 AMyEnemy::AMyEnemy()
@@ -46,6 +47,8 @@ AMyEnemy::AMyEnemy()
 void AMyEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+
+	AnimInstance = Cast<UCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 
 	auto HpWidget = Cast<UHpBarUserWidget>(HpBar->GetUserWidgetObject());
 	if (HpWidget)
@@ -97,5 +100,10 @@ void AMyEnemy::UnHighlight()
 {
 	bHighlighted = false;
 	GetMesh()->SetRenderCustomDepth(false);
+}
+
+void AMyEnemy::Attack()
+{
+	AnimInstance->PlayAttackMontage();
 }
 

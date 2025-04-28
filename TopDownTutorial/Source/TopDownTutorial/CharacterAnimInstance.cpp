@@ -2,7 +2,7 @@
 
 
 #include "CharacterAnimInstance.h"
-#include "MyPlayer.h"
+#include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 UCharacterAnimInstance::UCharacterAnimInstance()
@@ -46,7 +46,7 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UCharacterAnimInstance::AnimNotify_Hit()
 {
-	//UE_LOG(LogTemp, Log, TEXT("HIT"));
+	UE_LOG(LogTemp, Log, TEXT("HIT"));
 	OnAttackHit.Broadcast(); // 등록된 함수 호출
 }
 
