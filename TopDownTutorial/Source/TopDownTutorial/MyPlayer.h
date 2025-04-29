@@ -3,13 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "MyCharacter.h"
 #include "MyPlayer.generated.h"
 
 class UInputAction;
 
 UCLASS()
-class TOPDOWNTUTORIAL_API AMyPlayer : public ACharacter
+class TOPDOWNTUTORIAL_API AMyPlayer : public AMyCharacter
 {
 	GENERATED_BODY()
 private:
@@ -20,24 +20,15 @@ private:
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
-
-public:
-	UPROPERTY(VisibleAnywhere)
-	bool bIsAttacking = false;
-	UPROPERTY()
-	class UCharacterAnimInstance* AnimInstance;		   
+	   
 public:
 	AMyPlayer();
-public:
-	void Attack();	  
-	void HitAttack();	// Ãß°¡
-
-
-	UFUNCTION()
-	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+
+public:
+	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 };

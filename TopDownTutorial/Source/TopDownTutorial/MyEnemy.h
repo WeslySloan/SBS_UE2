@@ -3,25 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "MyCharacter.h"
 #include "MyEnemy.generated.h"
 
 UCLASS()
-class TOPDOWNTUTORIAL_API AMyEnemy : public ACharacter
+class TOPDOWNTUTORIAL_API AMyEnemy : public AMyCharacter
 {
 	GENERATED_BODY()
 public:
 	UPROPERTY(BlueprintReadOnly)
 	bool bHighlighted = false;
 
-	UPROPERTY(BlueprintReadOnly)
-	class UWidgetComponent* HpBar;
 
-	UPROPERTY()
-	class UCharacterInfo* CharacterInfo;
-
-	UPROPERTY()
-	class UCharacterAnimInstance* AnimInstance;
 
 public:
 	// Sets default values for this character's properties
@@ -45,9 +38,5 @@ public:
 public:
 	void Highlight();
 	void UnHighlight();
-public:
-	void Attack();
-
-
 
 };

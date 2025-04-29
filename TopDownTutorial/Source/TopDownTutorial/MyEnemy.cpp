@@ -8,6 +8,8 @@
 #include "Components/WidgetComponent.h"
 #include "CharacterInfo.h"
 #include "CharacterAnimInstance.h"
+#include "Kismet/GameplayStatics.h"
+#include "MyPlayer.h"
 
 // Sets default values
 AMyEnemy::AMyEnemy()
@@ -49,6 +51,8 @@ void AMyEnemy::BeginPlay()
 	Super::BeginPlay();
 
 	AnimInstance = Cast<UCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	AnimInstance->OnMontageEnded.AddDynamic(this, &AMyEnemy::OnAttackMontageEnded);
+	AnimInstance->OnAttackHit.AddUObject(this, &AMyEnemy::HitAttack);
 
 	auto HpWidget = Cast<UHpBarUserWidget>(HpBar->GetUserWidgetObject());
 	if (HpWidget)
@@ -100,10 +104,5 @@ void AMyEnemy::UnHighlight()
 {
 	bHighlighted = false;
 	GetMesh()->SetRenderCustomDepth(false);
-}
-
-void AMyEnemy::Attack()
-{
-	AnimInstance->PlayAttackMontage();
 }
 
