@@ -6,8 +6,6 @@
 #include "MyCharacter.h"
 #include "MyPlayer.generated.h"
 
-class UInputAction;
-
 UCLASS()
 class TOPDOWNTUTORIAL_API AMyPlayer : public AMyCharacter
 {
@@ -23,12 +21,4 @@ private:
 	   
 public:
 	AMyPlayer();
-
-protected:
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
-
-public:
-	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-
 };

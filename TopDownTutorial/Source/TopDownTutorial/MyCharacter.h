@@ -21,12 +21,19 @@ public:
 	class UCharacterInfo* CharacterInfo;
 	UPROPERTY()
 	class UCharacterAnimInstance* AnimInstance;
-
+public:
+	AMyCharacter();
+protected:
+	virtual void BeginPlay() override;
 public:
 	void Attack();
 	void HitAttack();
+public:
+	virtual void ApplyDamage(AActor* Actor);
 
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual void OnDead(AActor* DamageCauser);
 
 };
