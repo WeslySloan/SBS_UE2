@@ -9,6 +9,7 @@
 /**
  * 
  */
+class UItemWidget;
 class USlotWidget;
 class UUniformGridPanel;
 
@@ -22,8 +23,15 @@ public:
 protected:
 	virtual void NativeConstruct() override;
 public:
+	UPROPERTY()
 	TSubclassOf<USlotWidget> SlotWidgetClass;
+
+	UPROPERTY()
+	TSubclassOf<UItemWidget> ItemWidgetClass;
 	
+	UPROPERTY()
+	TArray<USlotWidget*> SlotWidgets;
+
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UUniformGridPanel> GridPanel;
 };

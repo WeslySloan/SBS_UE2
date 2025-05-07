@@ -3,15 +3,24 @@
 
 #include "SlotBoxWidget.h"
 #include "SlotWidget.h"
+#include "ItemWidget.h"
 #include "Components/UniformGridPanel.h"
 
 USlotBoxWidget::USlotBoxWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 
-	ConstructorHelpers::FClassFinder<USlotWidget> SW(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/WBP_Slot.WBP_Slot'"));
+	ConstructorHelpers::FClassFinder<USlotWidget> SW(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/WBP_Slot.WBP_Slot_C'"));
 	if (SW.Succeeded())
 	{
 		SlotWidgetClass = SW.Class;
+
+	}
+
+	ConstructorHelpers::FClassFinder<UItemWidget> IW(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/WBP_Item.WBP_Item_C'"));
+	if (IW.Succeeded())
+	{
+		ItemWidgetClass = IW.Class;
+		UE_LOG(LogTemp, Log, TEXT("Item Widget"));
 
 	}
 }
@@ -20,20 +29,26 @@ void USlotBoxWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	UE_LOG(LogTemp, Log, TEXT("NativeConstruct"));
+	const int COLUMN = 8;
+	const int ROW = 4;
 
-	const int X_COUNT = 4;
-	const int Y_COUNT = 8;
+	SlotWidgets.SetNum(COLUMN * ROW);
 
-	for (int y = 0; y < Y_COUNT; y++)
+	for (int x = 0; x < ROW; x++)
 	{
-		for (int x = 0; x < X_COUNT; x++)
+		for (int y = 0; y < COLUMN; y++)
 		{
-			UE_LOG(LogTemp, Log, TEXT("X : %d, Y : %d"), x, y);
-			USlotWidget* SlotWidget = CreateWidget<USlotWidget>(GetOwningPlayer(), SlotWidgetClass);
-			GridPanel->AddChildToUniformGrid(SlotWidget, x, y);
+			USlotWidget* SlotWidget = CreateWidget<USlotWidget>(GetWorld(), SlotWidgetClass);
+
+			int32 index = x * COLUMN + y;
+			SlotWidgets[index] = SlotWidget;
+			GridPanel->AddChildToUniformGrid(SlotWidget, y, x);
 
 		}
 
 	}
+
+	UItemWidget* ItemWidget = CreateWidget<UItemWidget>(GetWorld(), ItemWidgetClass);
+	GridPanel->AddChildToUniformGrid(ItemWidget, 0, 0);
+
 }

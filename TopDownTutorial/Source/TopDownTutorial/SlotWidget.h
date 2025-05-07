@@ -7,16 +7,22 @@
 #include "SlotWidget.generated.h"
 
 /**
- * 
+ *
  */
+
+class  UImage;
+
 UCLASS()
 class TOPDOWNTUTORIAL_API USlotWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
-protected:
-	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
-	virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
+public:
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UImage> Image_Slot;
 
-	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+public:
+	USlotWidget(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+protected:
+	virtual void NativeConstruct() override;
 };
