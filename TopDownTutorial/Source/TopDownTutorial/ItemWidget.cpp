@@ -4,9 +4,16 @@
 #include "ItemWidget.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "ItemDragWidget.h"
+#include "ItemDragDropOperation.h"
 
 UItemWidget::UItemWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
+	ConstructorHelpers::FClassFinder<UItemDragWidget> IDW(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/WBP_ItemDrag.WBP_ItemDrag_C'"));
+	if (IDW.Succeeded())
+	{
+		ItemDragWidgetClass = IDW.Class;
+	}
 }
 
 void UItemWidget::NativeConstruct()
@@ -34,14 +41,32 @@ void UItemWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 FReply UItemWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	FReply Reply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
-	UE_LOG(LogTemp, Log, TEXT("NativeOnMouseButtonDown"));
+
+	if (InMouseEvent.GetEffectingButton() == EKeys::LeftMouseButton)
+	{
+		Reply.DetectDrag(TakeWidget(), EKeys::LeftMouseButton);
+
+	}
+
 	return Reply;
 }
 
 void UItemWidget::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation)
 {
 	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
-	UE_LOG(LogTemp, Log, TEXT("NativeOnDragDetected"));
+
+	UItemDragWidget* ItemDragWidget = CreateWidget<UItemDragWidget>(GetWorld(), ItemDragWidgetClass);
+
+	UItemDragDropOperation* DragDrop = NewObject<UItemDragDropOperation>();
+	DragDrop->DefaultDragVisual = ItemDragWidget;
+	DragDrop->Pivot = EDragPivot::MouseDown;
+	//DragDrop->FromSlotPos =  ???? 
+
+
+	OutOperation = DragDrop;
+
+
+
 }
 
 void UItemWidget::NativeOnDragCancelled(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)

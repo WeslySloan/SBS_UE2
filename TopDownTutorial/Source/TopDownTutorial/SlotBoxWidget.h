@@ -18,6 +18,9 @@ UCLASS()
 class TOPDOWNTUTORIAL_API USlotBoxWidget : public UUserWidget
 {
 	GENERATED_BODY()
+private:
+	const int COLUMN = 8;
+	const int ROW = 4;
 public:
 	USlotBoxWidget(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 protected:
@@ -30,8 +33,15 @@ public:
 	TSubclassOf<UItemWidget> ItemWidgetClass;
 	
 	UPROPERTY()
-	TArray<USlotWidget*> SlotWidgets;
+	TArray<TObjectPtr<USlotWidget>> SlotWidgets;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UUniformGridPanel> GridPanel;
+protected:
+	void InventoryItemChanged(const FIntPoint& ItemSlotPos);
+
+public:
+	virtual void NativeOnDragLeave(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
+	virtual bool NativeOnDragOver(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
+	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
 };

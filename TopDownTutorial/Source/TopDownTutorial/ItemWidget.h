@@ -7,17 +7,21 @@
 #include "ItemWidget.generated.h"
 
 /**
- * 
+ *
  */
 
 class UImage;
 class UTextBlock;
+class UItemDragWidget;
 
 UCLASS()
 class TOPDOWNTUTORIAL_API UItemWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
+protected:
+	UPROPERTY()
+	TSubclassOf<UItemDragWidget> ItemDragWidgetClass;
 
 public:
 	UPROPERTY(meta = (BindWidget))
@@ -43,5 +47,5 @@ protected:
 
 	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
 	virtual void NativeOnDragCancelled(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
-	
+
 };
